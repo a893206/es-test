@@ -7,10 +7,11 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -100,16 +101,46 @@ public class EsDocQueryTest {
 //        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
 
         // 7.范围查询
+//        SearchRequest request = new SearchRequest();
+//        request.indices("user");
+//
+//        SearchSourceBuilder builder = new SearchSourceBuilder();
+//        RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery("age");
+//
+//        rangeQuery.gte(30);
+//        rangeQuery.lt(50);
+//
+//        builder.query(rangeQuery);
+//
+//        request.source(builder);
+//
+//        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        // 8.模糊查询
+//        SearchRequest request = new SearchRequest();
+//        request.indices("user");
+//
+//        SearchSourceBuilder builder = new SearchSourceBuilder();
+//        builder.query(QueryBuilders.fuzzyQuery("name", "wangwu").fuzziness(Fuzziness.TWO));
+//
+//        request.source(builder);
+//
+//        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        // 9.高亮查询
         SearchRequest request = new SearchRequest();
         request.indices("user");
 
         SearchSourceBuilder builder = new SearchSourceBuilder();
-        RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery("age");
+        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("name", "zhangsan");
 
-        rangeQuery.gte(30);
-        rangeQuery.lt(50);
+        HighlightBuilder highlightBuilder = new HighlightBuilder();
+        highlightBuilder.preTags("<font color='red'>");
+        highlightBuilder.postTags("</font>");
+        highlightBuilder.field("name");
 
-        builder.query(rangeQuery);
+        builder.highlighter(highlightBuilder);
+        builder.query(termQueryBuilder);
 
         request.source(builder);
 
