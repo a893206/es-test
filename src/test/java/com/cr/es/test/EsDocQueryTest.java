@@ -7,6 +7,7 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -66,14 +67,49 @@ public class EsDocQueryTest {
 //        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
 
         // 5.过滤字段
+//        SearchRequest request = new SearchRequest();
+//        request.indices("user");
+//
+//        SearchSourceBuilder builder = new SearchSourceBuilder().query(QueryBuilders.matchAllQuery());
+//
+//        String[] excludes = {"age"};
+//        String[] includes = {};
+//        builder.fetchSource(includes, excludes);
+//
+//        request.source(builder);
+//
+//        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        // 6.组合查询
+//        SearchRequest request = new SearchRequest();
+//        request.indices("user");
+//
+//        SearchSourceBuilder builder = new SearchSourceBuilder();
+//        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+//
+////        boolQueryBuilder.must(QueryBuilders.matchQuery("age", 30));
+////        boolQueryBuilder.must(QueryBuilders.matchQuery("sex", "男"));
+////        boolQueryBuilder.mustNot(QueryBuilders.matchQuery("sex", "男"));
+//        boolQueryBuilder.should(QueryBuilders.matchQuery("age", 30));
+//        boolQueryBuilder.should(QueryBuilders.matchQuery("age", 40));
+//
+//        builder.query(boolQueryBuilder);
+//
+//        request.source(builder);
+//
+//        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        // 7.范围查询
         SearchRequest request = new SearchRequest();
         request.indices("user");
 
-        SearchSourceBuilder builder = new SearchSourceBuilder().query(QueryBuilders.matchAllQuery());
+        SearchSourceBuilder builder = new SearchSourceBuilder();
+        RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery("age");
 
-        String[] excludes = {"age"};
-        String[] includes = {};
-        builder.fetchSource(includes, excludes);
+        rangeQuery.gte(30);
+        rangeQuery.lt(50);
+
+        builder.query(rangeQuery);
 
         request.source(builder);
 
