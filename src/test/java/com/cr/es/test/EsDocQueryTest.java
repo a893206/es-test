@@ -6,12 +6,11 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -128,19 +127,45 @@ public class EsDocQueryTest {
 //        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
 
         // 9.高亮查询
+//        SearchRequest request = new SearchRequest();
+//        request.indices("user");
+//
+//        SearchSourceBuilder builder = new SearchSourceBuilder();
+//        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("name", "zhangsan");
+//
+//        HighlightBuilder highlightBuilder = new HighlightBuilder();
+//        highlightBuilder.preTags("<font color='red'>");
+//        highlightBuilder.postTags("</font>");
+//        highlightBuilder.field("name");
+//
+//        builder.highlighter(highlightBuilder);
+//        builder.query(termQueryBuilder);
+//
+//        request.source(builder);
+//
+//        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        // 10.聚合查询
+//        SearchRequest request = new SearchRequest();
+//        request.indices("user");
+//
+//        SearchSourceBuilder builder = new SearchSourceBuilder();
+//
+//        AggregationBuilder aggregationBuilder = AggregationBuilders.max("maxAge").field("age");
+//        builder.aggregation(aggregationBuilder);
+//
+//        request.source(builder);
+//
+//        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        // 11.分组查询
         SearchRequest request = new SearchRequest();
         request.indices("user");
 
         SearchSourceBuilder builder = new SearchSourceBuilder();
-        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("name", "zhangsan");
 
-        HighlightBuilder highlightBuilder = new HighlightBuilder();
-        highlightBuilder.preTags("<font color='red'>");
-        highlightBuilder.postTags("</font>");
-        highlightBuilder.field("name");
-
-        builder.highlighter(highlightBuilder);
-        builder.query(termQueryBuilder);
+        AggregationBuilder aggregationBuilder = AggregationBuilders.terms("ageGroup").field("age");
+        builder.aggregation(aggregationBuilder);
 
         request.source(builder);
 
